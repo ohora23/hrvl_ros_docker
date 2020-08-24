@@ -1,0 +1,10 @@
+FROM hrvl/ros-melodic:cuda10.1-cudnn7-all-ubuntu18.04
+
+ENV DEBIAN_FRONTEND noninteractive
+
+USER ros
+WORKDIR /home/ros
+
+COPY assets/run_terminator.sh /home/ros
+
+CMD ["/home/ros/run_terminator.sh"]

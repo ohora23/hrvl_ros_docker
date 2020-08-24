@@ -1,0 +1,24 @@
+[global_config]
+  handle_size = 0
+  focus = system
+[keybindings]
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      size = 1200, 600
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    scrollback_infinite = True
+    use_system_font = False
+    background_darkness = 0.9
+    background_type = transparent
+    background_image = None
+    show_titlebar = False
+    font = 나눔고딕코딩 14
+
