@@ -1,22 +1,22 @@
 #!/bin/bash
 XSOCK=/tmp/.X11-unix
-XAUTH=/tmp/.docker.xauth
-touch $XAUTH
-xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
 
-nvidia-docker run -it \
-	--net host \
-	--hostname=hrvl-server\
-	--privileged=true \
+docker run -it \
+        --hostname=hrvl-server \
+        --gpus all \
+        --user=$(id -u $USER):$(id -g $USER) \
+        --workdir="/home/$USER" \
+        --privileged=true \
         --volume=$XSOCK:$XSOCK:rw \
-        --volume=$XAUTH:$XAUTH:rw \
-	--volume=/home/hrvl:/home/ros/data:rw \
-	--volume=${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
-	--group-add $(getent group audio | cut -d: -f3) \
-	--device /dev/snd \
-	--env="PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native" \
-        --env="XAUTHORITY=${XAUTH}" \
+        --volume=${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
+        --volume="/home/$USER:/home/$USER" \
+        --volume="/etc/group:/etc/group:ro" \
+        --volume="/etc/passwd:/etc/passwd:ro" \
+        --volume="/etc/shadow:/etc/shadow:ro" \
+        --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
+        --group-add $(getent group audio | cut -d: -f3) \
+        --device /dev/snd \
+        --env="PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native" \
         --env="DISPLAY=${DISPLAY}" \
-        --env="UID=`id -u $who`" \
-        --env="UID=`id -g $who`" \
      ohora23/hrvl_devel_env:latest_with_sound
+
